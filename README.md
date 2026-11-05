@@ -661,4 +661,4 @@ Real-time communication uses **Socket.io** (python-socketio on the server, socke
 
 ## Credits
 
-Built by [Aryan Maheshwari](https://github.com/arymaheshwari) and Nicholas DiCristo.
+Built by [Aryan Maheshwari](https://github.com/arymaheshwari).
