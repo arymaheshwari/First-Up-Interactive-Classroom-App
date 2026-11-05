@@ -1,0 +1,135 @@
+/* Shared optional-skin template: appearance controls, edge sprites, panels, and motion. */
+/* Appearance picker is shared by every skin; the light/dark button stays separate. */
+.appearance-controls {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  max-width: 100%;
+}
+.appearance-controls--floating {
+  position: fixed;
+  z-index: 40;
+  top: 0.75rem;
+  right: 0.75rem;
+}
+.appearance-controls__select {
+  width: 6.65rem;
+  min-height: 2.75rem;
+  padding: 0 0.5rem;
+  border: 1px solid rgb(var(--c-line-strong) / 0.55);
+  border-radius: var(--radius-control, 0.75rem);
+  background: rgb(var(--c-surface) / 0.9);
+  box-shadow: 0 4px 16px -10px rgb(var(--c-shadow) / 0.28);
+  color: rgb(var(--c-fg));
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+@media (max-width: 380px) {
+  .player-game__top { flex-wrap: wrap; }
+  .player-game__top-tools { width: 100%; justify-content: space-between; }
+}
+.manage-scene__footer:has(.appearance-controls) { flex-wrap: wrap; }
+.manage-scene__footer:has(.appearance-controls) .appearance-controls { width: 100%; justify-content: space-between; }
+.admin-appearance-footer { flex-wrap: wrap; }
+.admin-appearance-footer .appearance-controls { width: 100%; justify-content: space-between; }
+
+:root:is([data-visual-theme='pixel-cats'], [data-visual-theme='pixel-classroom'])[data-theme] :is(.auth-scene, .host-home, .manage-scene, .player-game) {
+  background-image:
+    radial-gradient(circle at 13% 13%, rgb(var(--c-scene-rose) / 0.26), transparent 28%),
+    radial-gradient(circle at 87% 72%, rgb(var(--c-scene-violet) / 0.24), transparent 33%),
+    linear-gradient(135deg, rgb(var(--c-canvas)), rgb(var(--c-surface-sunken)));
+}
+:root:is([data-visual-theme='pixel-cats'], [data-visual-theme='pixel-classroom'])[data-theme] :is(.auth-scene, .host-home, .manage-scene, .player-game)::after {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background-image: var(--theme-decor-one), var(--theme-decor-two);
+  background-repeat: no-repeat;
+  background-position: left 2.5rem top 16%, right 2.5rem bottom 11%;
+  background-size: clamp(5rem, 9vw, 9rem), clamp(4rem, 7vw, 7rem);
+  image-rendering: pixelated;
+  opacity: 0.78;
+  animation: pixel-theme-float 8s ease-in-out infinite;
+  content: '';
+  pointer-events: none;
+}
+:root:is([data-visual-theme='pixel-cats'], [data-visual-theme='pixel-classroom'])[data-theme] .manage-scene__rail::after {
+  position: absolute;
+  right: 1.2rem;
+  bottom: 6.8rem;
+  width: 4.25rem;
+  height: 4.25rem;
+  background: var(--theme-decor-two) center / contain no-repeat;
+  image-rendering: pixelated;
+  opacity: 0.72;
+  animation: pixel-theme-float 7s ease-in-out infinite;
+  content: '';
+  pointer-events: none;
+}
+:root:is([data-visual-theme='pixel-cats'], [data-visual-theme='pixel-classroom'])[data-theme] .admin-appearance-footer::before {
+  display: block;
+  width: 2.75rem;
+  height: 2.75rem;
+  margin-right: auto;
+  background: var(--theme-decor-one) center / contain no-repeat;
+  image-rendering: pixelated;
+  content: '';
+  pointer-events: none;
+}
+:root:is([data-visual-theme='pixel-cats'], [data-visual-theme='pixel-classroom'])[data-theme] :is(.auth-scene__card, .host-home__panel, .manage-panel, .manage-scene__rail, .player-glass) {
+  border: 2px solid rgb(var(--c-line-strong) / 0.72);
+  border-radius: 1.15rem;
+  box-shadow: 5px 5px 0 rgb(var(--c-scene-violet) / 0.23), 0 24px 50px -28px rgb(var(--c-shadow) / 0.6);
+}
+:root:is([data-visual-theme='pixel-cats'], [data-visual-theme='pixel-classroom'])[data-theme] :is(.auth-scene__primary, .host-home__primary, .manage-toolbar__primary, .player-question__submit, .player-play-again) {
+  background: rgb(var(--c-accent));
+  box-shadow: 4px 4px 0 rgb(var(--c-scene-violet) / 0.4);
+}
+:root:is([data-visual-theme='pixel-cats'], [data-visual-theme='pixel-classroom'])[data-theme] :is(.auth-scene__primary, .host-home__primary, .manage-toolbar__primary, .player-question__submit, .player-play-again):hover {
+  background: rgb(var(--c-accent-hover));
+}
+/* Host projector and Admin routes use the shared tokens even without a scene shell. */
+:root:is([data-visual-theme='pixel-cats'], [data-visual-theme='pixel-classroom'])[data-theme] body {
+  background-image: radial-gradient(circle at 6% 20%, rgb(var(--c-scene-rose) / 0.12), transparent 22%),
+    radial-gradient(circle at 94% 80%, rgb(var(--c-scene-violet) / 0.14), transparent 24%);
+  background-attachment: fixed;
+}
+:root:is([data-visual-theme='pixel-cats'], [data-visual-theme='pixel-classroom'])[data-theme][data-app='host'] body::before,
+:root:is([data-visual-theme='pixel-cats'], [data-visual-theme='pixel-classroom'])[data-theme][data-app='admin'] body::before {
+  position: fixed;
+  z-index: 0;
+  inset: 0;
+  background-image: var(--theme-decor-one), var(--theme-decor-two);
+  background-repeat: no-repeat;
+  background-position: left 1.5rem top 12%, right 1.5rem bottom 12%;
+  background-size: 5.5rem, 5rem;
+  image-rendering: pixelated;
+  opacity: 0.48;
+  animation: pixel-theme-float 9s ease-in-out infinite;
+  content: '';
+  pointer-events: none;
+}
+:root:is([data-visual-theme='pixel-cats'], [data-visual-theme='pixel-classroom'])[data-theme][data-app='host'] #root,
+:root:is([data-visual-theme='pixel-cats'], [data-visual-theme='pixel-classroom'])[data-theme][data-app='admin'] #root {
+  position: relative;
+  z-index: 1;
+}
+@media (max-width: 700px) {
+  :root:is([data-visual-theme='pixel-cats'], [data-visual-theme='pixel-classroom'])[data-theme] :is(.auth-scene, .host-home, .manage-scene, .player-game)::after {
+    background-position: left -1.5rem bottom 1rem, right -1.5rem top 5.5rem;
+    background-size: 4.5rem, 4rem;
+    opacity: 0.35;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  :root:is([data-visual-theme='pixel-cats'], [data-visual-theme='pixel-classroom'])[data-theme] :is(.auth-scene, .host-home, .manage-scene, .player-game)::after,
+  :root:is([data-visual-theme='pixel-cats'], [data-visual-theme='pixel-classroom'])[data-theme] .manage-scene__rail::after,
+  :root:is([data-visual-theme='pixel-cats'], [data-visual-theme='pixel-classroom'])[data-theme] body::before {
+    animation: none;
+  }
+}
+@keyframes pixel-theme-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}

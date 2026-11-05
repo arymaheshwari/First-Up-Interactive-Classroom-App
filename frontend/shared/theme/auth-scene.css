@@ -1,0 +1,71 @@
+/* Shared Aurora shell for Host, Player and Admin entry flows. */
+:root[data-visual-theme] .auth-scene {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  min-height: 100vh;
+  min-height: 100dvh;
+  place-items: center;
+  overflow: hidden;
+  padding: 6rem 1.25rem 3rem;
+  background:
+    radial-gradient(ellipse 75% 70% at 10% 12%, rgb(var(--c-scene-violet) / 0.22), transparent 72%),
+    radial-gradient(ellipse 75% 72% at 80% 20%, rgb(var(--c-scene-rose) / 0.20), transparent 72%),
+    radial-gradient(ellipse 90% 85% at 80% 96%, rgb(var(--c-scene-blue) / 0.23), transparent 76%),
+    rgb(var(--c-canvas));
+}
+
+:root[data-visual-theme] .auth-scene::before {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 36rem 28rem at 34% 57%, rgb(var(--c-scene-rose) / 0.17), transparent 72%),
+    radial-gradient(ellipse 36rem 28rem at 77% 72%, rgb(var(--c-scene-blue) / 0.20), transparent 72%);
+  content: '';
+  pointer-events: none;
+}
+
+:root[data-visual-theme] .auth-scene__card {
+  width: min(100%, 29rem);
+  border: 1px solid rgb(var(--c-line-strong) / 0.42);
+  border-radius: 2rem;
+  background: linear-gradient(145deg, rgb(var(--c-surface) / 0.82), rgb(var(--c-surface) / 0.74));
+  box-shadow:
+    0 30px 80px -30px rgb(var(--c-shadow) / 0.35),
+    inset 0 1px 0 rgb(var(--c-surface-raised) / 0.72);
+  backdrop-filter: blur(28px) saturate(145%);
+  -webkit-backdrop-filter: blur(28px) saturate(145%);
+}
+
+:root[data-visual-theme] .auth-scene__header {
+  padding: 2.5rem 2.5rem 1.75rem;
+  text-align: center;
+}
+
+:root[data-visual-theme] .auth-scene__content {
+  padding: 0 2.5rem 2.5rem;
+}
+
+:root[data-visual-theme] .auth-scene__primary {
+  background: linear-gradient(110deg, rgb(var(--c-accent)), rgb(var(--c-scene-blue)));
+  box-shadow: 0 12px 28px -16px rgb(var(--c-accent) / 0.75);
+}
+
+:root[data-visual-theme] .auth-scene__primary:hover {
+  background: linear-gradient(110deg, rgb(var(--c-accent-hover)), rgb(var(--c-scene-blue)));
+}
+
+:root[data-visual-theme] .auth-scene__field-icon {
+  position: absolute;
+  top: 50%;
+  left: 0.9rem;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+@media (max-width: 480px) {
+  :root[data-visual-theme] .auth-scene__card { border-radius: 1.5rem; }
+  :root[data-visual-theme] .auth-scene__header { padding: 2rem 1.5rem 1.5rem; }
+  :root[data-visual-theme] .auth-scene__content { padding: 0 1.5rem 2rem; }
+}

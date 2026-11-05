@@ -1,0 +1,62 @@
+/* Optional skin: both color modes inherit the original semantic system, then
+   override just the roles that give the cat world its pink/purple identity. */
+:root[data-visual-theme='pixel-cats'][data-theme='light'] {
+  --c-canvas: 255 242 250;
+  --c-surface: 255 250 254;
+  --c-surface-raised: 255 252 255;
+  --c-surface-sunken: 246 226 247;
+  --c-surface-hover: 246 215 240;
+  --c-fg: 53 29 65;
+  --c-fg-muted: 91 57 99;
+  --c-fg-subtle: 103 73 109;
+  --c-line: 223 183 222;
+  --c-line-strong: 139 89 146;
+  --c-accent: 126 45 130;
+  --c-accent-hover: 105 32 111;
+  --c-accent-fg: 117 39 122;
+  --c-accent-subtle: 248 222 245;
+  --c-focus: 126 45 130;
+  --c-scene-rose: 242 103 179;
+  --c-scene-violet: 157 102 218;
+  --c-scene-blue: 208 128 220;
+  --c-shadow: 82 35 92;
+  --canvas-bg: rgb(246 226 247);
+  --canvas-grid: rgb(206 174 212);
+  --canvas-axis: rgb(91 57 99);
+  --canvas-label: rgb(91 57 99);
+  --canvas-pin: rgb(126 45 130);
+}
+:root[data-visual-theme='pixel-cats'][data-theme='dark'] {
+  --c-canvas: 25 15 38;
+  --c-surface: 43 25 58;
+  --c-surface-raised: 57 34 75;
+  --c-surface-sunken: 20 11 31;
+  --c-surface-hover: 69 41 87;
+  --c-fg: 255 239 249;
+  --c-fg-muted: 228 203 235;
+  --c-fg-subtle: 202 171 214;
+  --c-line: 100 62 116;
+  --c-line-strong: 174 124 190;
+  --c-accent: 155 58 160;
+  --c-accent-hover: 170 64 173;
+  --c-accent-fg: 246 173 231;
+  --c-danger-fg: 255 128 128;
+  --c-accent-subtle: 73 33 76;
+  --c-focus: 245 156 222;
+  --c-scene-rose: 205 69 145;
+  --c-scene-violet: 129 72 193;
+  --c-scene-blue: 160 84 189;
+  --c-shadow: 6 3 14;
+  --canvas-bg: rgb(20 11 31);
+  --canvas-grid: rgb(100 62 116);
+  --canvas-axis: rgb(228 203 235);
+  --canvas-label: rgb(202 171 214);
+  --canvas-pin: rgb(245 156 222);
+}
+
+/* Sprites are swappable theme assets; decoration is entirely outside hit testing.
+   Every scene gets the same two edge anchors without any page-specific markup. */
+:root[data-visual-theme='pixel-cats'][data-theme] {
+  --theme-decor-one: url('./assets/cat-pink.svg');
+  --theme-decor-two: url('./assets/cat-lilac.svg');
+}

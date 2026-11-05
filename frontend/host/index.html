@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <script>
+      // Pick the theme before the first paint (no flash). Same rule as
+      // frontend/shared/theme/theme.ts applyTheme(resolveTheme()): a stored choice,
+      // else the OS preference.
+      (function () {
+        var theme = null;
+        try {
+          theme = localStorage.getItem('buzzer-theme-host') || localStorage.getItem('buzzer-theme');
+        } catch (e) {}
+        if (theme !== 'light' && theme !== 'dark') {
+          theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        document.documentElement.dataset.theme = theme;
+        var visual = null;
+        try { visual = localStorage.getItem('buzzer-visual-theme-host'); } catch (e) {}
+        document.documentElement.dataset.visualTheme =
+          visual === 'pixel-cats' || visual === 'pixel-classroom' ? visual : 'aurora';
+      })();
+    </script>
+    <title>Buzzer — Host</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

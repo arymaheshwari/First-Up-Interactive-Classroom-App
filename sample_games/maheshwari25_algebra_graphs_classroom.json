@@ -1,0 +1,165 @@
+{
+  "format": "buzzer/game",
+  "version": 1,
+  "game": {
+    "title": "Algebra I: Lines, Parabolas and Their Graphs",
+    "description": "A classroom check-in for an Algebra I unit on graphing. Students plot points on the coordinate grid (Pin It), estimate values, and answer concept questions on slope, intercepts and vertices. Ends with two participation questions to guide the next lesson.",
+    "max_players": 150
+  },
+  "questions": [
+    {
+      "type": "pin_drop",
+      "grading_type": "COMPLETENESS",
+      "prompt": "Warm-up: drop a pin anywhere in Quadrant II. (Participation — we'll look at everyone's pins together.)",
+      "config": {
+        "grid": { "xMin": -5, "xMax": 5, "yMin": -5, "yMax": 5, "step": 1 },
+        "snap": true
+      },
+      "answer_data": {},
+      "time_limit_seconds": 20,
+      "points_value": 1.0
+    },
+    {
+      "type": "multiple_choice",
+      "grading_type": "ACCURACY",
+      "prompt": "What is the slope of the line through the points (1, 2) and (3, 8)?",
+      "config": {
+        "options": ["2", "3", "4", "6"]
+      },
+      "answer_data": {
+        "answer_points": [0.0, 1.0, 0.0, 0.0]
+      },
+      "time_limit_seconds": 30,
+      "points_value": 1.0
+    },
+    {
+      "type": "pin_drop",
+      "grading_type": "ACCURACY",
+      "prompt": "Plot the y-intercept of the line y = 2x − 4.",
+      "config": {
+        "grid": { "xMin": -6, "xMax": 6, "yMin": -6, "yMax": 6, "step": 1 },
+        "snap": true
+      },
+      "answer_data": {
+        "target": { "x": 0, "y": -4 },
+        "fullRadius": 0.5,
+        "zeroRadius": 3
+      },
+      "time_limit_seconds": 30,
+      "points_value": 1.0
+    },
+    {
+      "type": "true_false",
+      "grading_type": "ACCURACY",
+      "prompt": "The graph of y = x² − 4 crosses the x-axis at x = 2 and at x = −2.",
+      "config": {},
+      "answer_data": {
+        "answer_points": { "true": 1.0, "false": 0.0 }
+      },
+      "time_limit_seconds": 20,
+      "points_value": 1.0
+    },
+    {
+      "type": "fill_in_the_blank",
+      "grading_type": "ACCURACY",
+      "prompt": "The highest or lowest point of a parabola, where it turns around, is called its ________.",
+      "config": { "maxLength": 30 },
+      "answer_data": {
+        "acceptedAnswers": ["vertex"],
+        "answerPoints": [1.0],
+        "editDistance": 1
+      },
+      "time_limit_seconds": 25,
+      "points_value": 1.0
+    },
+    {
+      "type": "pin_drop",
+      "grading_type": "ACCURACY",
+      "prompt": "Plot the vertex of the parabola y = (x − 3)² − 2.",
+      "config": {
+        "grid": { "xMin": -2, "xMax": 8, "yMin": -6, "yMax": 4, "step": 1 },
+        "snap": true
+      },
+      "answer_data": {
+        "target": { "x": 3, "y": -2 },
+        "fullRadius": 0.5,
+        "zeroRadius": 3
+      },
+      "time_limit_seconds": 35,
+      "points_value": 1.0
+    },
+    {
+      "type": "multi_select",
+      "grading_type": "ACCURACY",
+      "prompt": "Select every equation whose graph is a straight line.",
+      "config": {
+        "options": ["y = 3x + 1", "2x + y = 7", "y = x²", "y = 1/x"]
+      },
+      "answer_data": {
+        "answer_points": [1.0, 1.0, -1.0, -1.0]
+      },
+      "time_limit_seconds": 30,
+      "points_value": 2.0
+    },
+    {
+      "type": "estimate",
+      "grading_type": "ACCURACY",
+      "prompt": "Without a calculator: if f(x) = 2ˣ, estimate f(10).",
+      "config": { "integer": true },
+      "answer_data": {
+        "answer": 1024,
+        "tolerance": { "mode": "relative", "full": 5, "zero": 50 }
+      },
+      "time_limit_seconds": 30,
+      "points_value": 1.0
+    },
+    {
+      "type": "pin_drop",
+      "grading_type": "ACCURACY",
+      "prompt": "Plot the point where the lines y = x + 1 and y = −x + 5 intersect.",
+      "config": {
+        "grid": { "xMin": -2, "xMax": 6, "yMin": -1, "yMax": 7, "step": 1 },
+        "snap": true
+      },
+      "answer_data": {
+        "target": { "x": 2, "y": 3 },
+        "fullRadius": 0.5,
+        "zeroRadius": 2.5
+      },
+      "time_limit_seconds": 40,
+      "points_value": 2.0
+    },
+    {
+      "type": "estimate",
+      "grading_type": "ACCURACY",
+      "prompt": "Estimate √50 to two decimal places. (Hint: it's a little more than √49.)",
+      "config": {},
+      "answer_data": {
+        "answer": 7.07,
+        "tolerance": { "mode": "absolute", "full": 0.1, "zero": 1 }
+      },
+      "time_limit_seconds": 30,
+      "points_value": 1.0
+    },
+    {
+      "type": "estimate",
+      "grading_type": "COMPLETENESS",
+      "prompt": "Roughly how many minutes did you spend on last night's graphing problem set? (Participation — be honest!)",
+      "config": { "unit": "minutes", "integer": true },
+      "answer_data": {},
+      "time_limit_seconds": 20,
+      "points_value": 1.0
+    },
+    {
+      "type": "multiple_choice",
+      "grading_type": "COMPLETENESS",
+      "prompt": "Which topic would you most like to review before the unit test?",
+      "config": {
+        "options": ["Finding slope", "Intercepts", "Vertex form of a parabola", "Solving systems by graphing"]
+      },
+      "answer_data": {},
+      "time_limit_seconds": 20,
+      "points_value": 1.0
+    }
+  ]
+}

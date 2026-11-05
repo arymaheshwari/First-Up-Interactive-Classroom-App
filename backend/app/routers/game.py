@@ -1,0 +1,351 @@
+from __future__ import annotations
+
+from typing import Annotated
+
+import structlog
+from fastapi import APIRouter, Depends, Query
+from fastapi.responses import StreamingResponse
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from ..common.dependencies import get_current_user, require_user
+from ..common.exceptions import NotFoundError
+from ..config import settings
+from ..database import get_db
+from ..models.course import Course, UserCourseAccess
+from ..models.game import Game, Question
+from ..models.session import GameSession
+from ..models.user import User
+from ..redis_client import get_redis
+from ..schemas.game import (
+    ActiveSessionItem,
+    MyCourseItem,
+    MyGameItem,
+    RoomCreateRequest,
+    RoomCreateResponse,
+    RoomInfoResponse,
+)
+from ..services import feedback_service, game_service
+from ..services import state_service as state
+
+router = APIRouter(prefix="/game", tags=["game"])
+logger = structlog.get_logger()
+
+
+# ---------------------------------------------------------------------------
+# Host resource discovery
+# ---------------------------------------------------------------------------
+
+
+@router.get("/my-courses", response_model=list[MyCourseItem])
+async def my_courses(
+    user: Annotated[User, Depends(require_user)],
+    db: Annotated[AsyncSession, Depends(get_db)],
+) -> list[dict]:
+    """
+    Returns courses the authenticated user can host.
+    ADMIN sees all courses; USER sees courses with HOST role in user_course_access.
+    """
+    if user.role == "ADMIN":
+        result = await db.execute(
+            select(Course).order_by(Course.semester.desc(), Course.name)
+        )
+        return [
+            {"id": c.id, "name": c.name, "semester": c.semester, "role": "HOST"}
+            for c in result.scalars().all()
+        ]
+
+    result = await db.execute(
+        select(Course, UserCourseAccess)
+        .join(UserCourseAccess, UserCourseAccess.course_id == Course.id)
+        .where(
+            UserCourseAccess.user_id == user.id,
+            UserCourseAccess.role == "HOST",
+        )
+        .order_by(Course.semester.desc(), Course.name)
+    )
+    return [
+        {"id": c.id, "name": c.name, "semester": c.semester, "role": uca.role}
+        for c, uca in result.all()
+    ]
+
+
+@router.get("/my-games", response_model=list[MyGameItem])
+async def my_games(
+    user: Annotated[User, Depends(require_user)],
+    db: Annotated[AsyncSession, Depends(get_db)],
+    course_id: Annotated[int | None, Query(gt=0)] = None,
+) -> list[Game]:
+    """
+    Returns games the authenticated user can run, optionally limited to one course.
+    ADMIN sees all games; USER needs HOST role in the game's course AND a game grant.
+    """
+    stmt = select(Game).order_by(Game.title)
+    if course_id is not None:
+        stmt = stmt.where(Game.course_id == course_id)
+    if user.role != "ADMIN":
+        stmt = stmt.where(Game.id.in_(game_service.manageable_game_ids(user)))
+    result = await db.execute(stmt)
+    return result.scalars().all()
+
+
+@router.get("/my-active-sessions", response_model=list[ActiveSessionItem])
+async def my_active_sessions(
+    user: Annotated[User, Depends(require_user)],
+    db: Annotated[AsyncSession, Depends(get_db)],
+) -> list[dict]:
+    """Returns LOBBY/IN_PROGRESS sessions hosted by the current user."""
+    result = await db.execute(
+        select(GameSession)
+        .where(
+            GameSession.host_user_id == user.id,
+            GameSession.status.in_(["LOBBY", "IN_PROGRESS"]),
+        )
+        .order_by(GameSession.created_at.desc())
+    )
+    sessions = result.scalars().all()
+
+    rows = []
+    for s in sessions:
+        game = await db.get(Game, s.game_id)
+        course = await db.get(Course, s.course_id)
+        rows.append(
+            {
+                "session_id": s.id,
+                "room_code": s.room_code,
+                "status": s.status,
+                "game_title": game.title if game else "Unknown",
+                "course_name": course.name if course else "Unknown",
+                "course_semester": course.semester if course else "",
+            }
+        )
+    return rows
+
+
+@router.delete("/sessions/{session_id}", status_code=204)
+async def delete_session(
+    session_id: str,
+    user: Annotated[User, Depends(require_user)],
+    db: Annotated[AsyncSession, Depends(get_db)],
+    redis=Depends(get_redis),
+) -> None:
+    """Permanently delete a session and all associated scores. Host or admin only."""
+    session = await db.get(GameSession, session_id)
+    if not session:
+        raise NotFoundError(f"Session {session_id} not found")
+
+    if not await game_service.can_act_as_session_host(db, user, session):
+        from ..common.exceptions import ForbiddenError
+
+        raise ForbiddenError("Only the session host can delete this session")
+
+    # Wipe Redis state (room key, player keys, question key, answered sets, dist hashes)
+    await state.delete_room_state(redis, session.room_code, session_id)
+
+    # Delete from MySQL — cascade="all, delete-orphan" removes session_scores automatically
+    await db.delete(session)
+    await db.commit()
+
+    logger.info("session_deleted", session_id=session_id, deleted_by=user.id)
+
+
+# ---------------------------------------------------------------------------
+# Room management
+# ---------------------------------------------------------------------------
+
+
+@router.post("/rooms", response_model=RoomCreateResponse, status_code=201)
+async def create_room(
+    body: RoomCreateRequest,
+    user: Annotated[User, Depends(require_user)],
+    db: Annotated[AsyncSession, Depends(get_db)],
+    redis=Depends(get_redis),
+) -> dict:
+    session = await game_service.create_room(
+        db=db,
+        redis=redis,
+        host=user,
+        game_id=body.game_id,
+        course_id=body.course_id,
+        max_rooms=settings.MAX_ROOMS,
+    )
+    return {"room_code": session.room_code, "session_id": session.id}
+
+
+@router.get("/rooms/{room_code}/ping")
+async def ping_room(
+    room_code: str,
+    redis=Depends(get_redis),
+) -> dict:
+    """Public endpoint — no auth required. Confirms a room is joinable."""
+    from ..services.state_service import get_room_state
+    from ..common.exceptions import NotFoundError as _NF, ConflictError as _CE
+
+    state = await get_room_state(redis, room_code.upper())
+    if not state:
+        raise _NF(f"Room '{room_code}' not found")
+    if state.get("status") not in ("LOBBY", "IN_PROGRESS"):
+        raise _CE("This game has already ended")
+    return {"status": state.get("status")}
+
+
+@router.get("/rooms/{room_code}", response_model=RoomInfoResponse)
+async def get_room(
+    room_code: str,
+    _: Annotated[User, Depends(get_current_user)],
+    db: Annotated[AsyncSession, Depends(get_db)],
+    redis=Depends(get_redis),
+) -> dict:
+    """Get session metadata for reconnection. Any authenticated user can call this."""
+    session, _ = await game_service.get_session_by_code(db, redis, room_code.upper())
+
+    # Fetch related records for the response
+    game = await db.get(Game, session.game_id)
+    course = await db.get(Course, session.course_id)
+
+    q_count_result = await db.execute(
+        select(Question).where(Question.game_id == session.game_id)
+    )
+    question_count = len(q_count_result.scalars().all())
+
+    return {
+        "session_id": session.id,
+        "room_code": session.room_code,
+        "status": session.status,
+        "game_title": game.title if game else "Unknown",
+        "course_id": session.course_id,
+        "course_name": course.name if course else "Unknown",
+        "course_semester": course.semester if course else "",
+        "question_count": question_count,
+    }
+
+
+# ---------------------------------------------------------------------------
+# Post-game guest reconciliation (host-facing)
+# ---------------------------------------------------------------------------
+
+
+@router.get("/sessions/{session_id}/guests")
+async def list_session_guests(
+    session_id: str,
+    user: Annotated[User, Depends(require_user)],
+    db: Annotated[AsyncSession, Depends(get_db)],
+) -> list[dict]:
+    """List unmerged guest players from a completed session."""
+    from ..models.session import SessionScore
+    from ..models.user import User as UserModel
+
+    session = await db.get(GameSession, session_id)
+    if not session:
+        raise NotFoundError(f"Session {session_id} not found")
+
+    # Only the session host or an admin can see this
+    if not await game_service.can_act_as_session_host(db, user, session):
+        from ..common.exceptions import ForbiddenError
+
+        raise ForbiddenError("Only the session host can view guest players")
+
+    result = await db.execute(
+        select(UserModel)
+        .join(SessionScore, SessionScore.user_id == UserModel.id)
+        .where(
+            SessionScore.session_id == session_id,
+            UserModel.role == "GUEST",
+        )
+        .distinct()
+    )
+    guests = result.scalars().all()
+    return [
+        {
+            "id": g.id,
+            "display_name": g.display_name,
+            "email": g.email,
+        }
+        for g in guests
+    ]
+
+
+@router.post("/sessions/{session_id}/merge-guest", status_code=204)
+async def merge_guest_for_session(
+    session_id: str,
+    body: dict,
+    user: Annotated[User, Depends(require_user)],
+    db: Annotated[AsyncSession, Depends(get_db)],
+) -> None:
+    """Host-initiated guest merge. Delegates to the same logic as the admin endpoint."""
+    from ..models.session import SessionScore
+    from ..models.user import User as UserModel
+
+    session = await db.get(GameSession, session_id)
+    if not session:
+        raise NotFoundError(f"Session {session_id} not found")
+    if not await game_service.can_act_as_session_host(db, user, session):
+        from ..common.exceptions import ForbiddenError
+
+        raise ForbiddenError("Only the session host can merge guest players")
+
+    guest_user_id: str = body.get("guest_user_id", "")
+    target_netid: str = body.get("target_netid", "")
+
+    if not guest_user_id or not target_netid:
+        from ..common.exceptions import ConflictError
+
+        raise ConflictError("guest_user_id and target_netid are required")
+
+    guest = await db.get(UserModel, guest_user_id)
+    if not guest or guest.role != "GUEST":
+        raise NotFoundError(f"Guest user {guest_user_id} not found")
+
+    real_result = await db.execute(
+        select(UserModel).where(UserModel.netid == target_netid.lower())
+    )
+    real_user = real_result.scalar_one_or_none()
+    if not real_user:
+        raise NotFoundError(f"No user with netid '{target_netid}' found")
+
+    scores_result = await db.execute(
+        select(SessionScore).where(SessionScore.user_id == guest_user_id)
+    )
+    for score in scores_result.scalars().all():
+        score.user_id = real_user.id
+
+    await feedback_service.move_feedback(db, guest_user_id, real_user.id)
+    await db.delete(guest)
+    logger.info(
+        "guest_merged_by_host",
+        guest_id=guest_user_id,
+        real_user_id=real_user.id,
+        session_id=session_id,
+    )
+
+
+# ---------------------------------------------------------------------------
+# Session score export
+# ---------------------------------------------------------------------------
+
+
+@router.get("/sessions/{session_id}/export")
+async def export_session_scores(
+    session_id: str,
+    user: Annotated[User, Depends(require_user)],
+    db: Annotated[AsyncSession, Depends(get_db)],
+) -> StreamingResponse:
+    """Download session scores as a CSV. Accessible by the session host or an admin."""
+    session = await db.get(GameSession, session_id)
+    if not session:
+        raise NotFoundError(f"Session {session_id} not found")
+
+    if not await game_service.can_act_as_session_host(db, user, session):
+        from ..common.exceptions import ForbiddenError
+
+        raise ForbiddenError("Only the session host can export scores")
+
+    from ..services.export_service import build_session_csv
+
+    filename, content = await build_session_csv(db, session_id)
+
+    return StreamingResponse(
+        iter([content]),
+        media_type="text/csv",
+        headers={"Content-Disposition": f'attachment; filename="{filename}"'},
+    )

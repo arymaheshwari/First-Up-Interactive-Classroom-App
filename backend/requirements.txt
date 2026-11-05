@@ -1,0 +1,28 @@
+fastapi>=0.111
+uvicorn[standard]>=0.29
+gunicorn>=22.0
+python-socketio[asyncio_client]>=5.11
+sqlalchemy[asyncio]>=2.0
+asyncmy>=0.2
+alembic>=1.13
+redis[hiredis]>=5.0
+python-jose[cryptography]>=3.3
+# passlib 1.7.x is incompatible with bcrypt>=4.0 (wrap-bug detection uses >72-byte
+# test string that bcrypt 4.0 now rejects). Pin bcrypt to 3.x until passlib is updated.
+passlib[bcrypt]>=1.7
+bcrypt<4.0
+bleach>=6.1
+rapidfuzz>=3.0
+slowapi>=0.1
+structlog>=24.0
+pydantic-settings>=2.0
+pydantic[email]>=2.7
+jinja2>=3.1
+python-multipart>=0.0.9
+# Image uploads (T8). >=11 is well past the libwebp CVE-2023-4863 (10.0.1) and
+# CVE-2024-28219 (10.3.0) fixes.
+Pillow>=11.0
+pytest>=8.0
+pytest-asyncio>=0.23
+httpx>=0.27
+locust>=2.28

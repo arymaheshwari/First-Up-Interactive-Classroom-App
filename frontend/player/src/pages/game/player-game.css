@@ -1,0 +1,204 @@
+/* Aurora skin for the live Player flow; light/dark colors stay token-driven. */
+:root[data-visual-theme] .player-game {
+  position: relative;
+  isolation: isolate;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: 1.25rem 1rem 2rem;
+  background:
+    radial-gradient(ellipse 95% 70% at 6% 12%, rgb(var(--c-scene-violet) / 0.22), transparent 72%),
+    radial-gradient(ellipse 95% 72% at 85% 18%, rgb(var(--c-scene-rose) / 0.20), transparent 72%),
+    radial-gradient(ellipse 100% 85% at 80% 95%, rgb(var(--c-scene-blue) / 0.23), transparent 76%),
+    rgb(var(--c-canvas));
+}
+
+:root[data-visual-theme] .player-game__shell {
+  width: min(100%, 30rem);
+  margin: 0 auto;
+}
+
+:root[data-visual-theme] .player-game__top {
+  display: flex;
+  min-height: 2.75rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+:root[data-visual-theme] .player-game__top-tools {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+:root[data-visual-theme] .player-game__room-code,
+:root[data-visual-theme] .player-game__theme-toggle {
+  border: 1px solid rgb(var(--c-line-strong) / 0.45);
+  background: rgb(var(--c-surface) / 0.75);
+  box-shadow: 0 4px 16px -10px rgb(var(--c-shadow) / 0.28);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+:root[data-visual-theme] .player-game__room-code {
+  display: grid;
+  min-height: 2.75rem;
+  place-items: center;
+  padding: 0 0.75rem;
+  border-radius: 0.75rem;
+  color: rgb(var(--c-fg-muted));
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+}
+
+:root[data-visual-theme] .player-glass {
+  border: 1px solid rgb(var(--c-line-strong) / 0.42);
+  border-radius: 1.75rem;
+  background: linear-gradient(145deg, rgb(var(--c-surface) / 0.84), rgb(var(--c-surface) / 0.76));
+  box-shadow: 0 30px 80px -30px rgb(var(--c-shadow) / 0.35), inset 0 1px 0 rgb(var(--c-surface-raised) / 0.72);
+  backdrop-filter: blur(28px) saturate(145%);
+  -webkit-backdrop-filter: blur(28px) saturate(145%);
+}
+
+:root[data-visual-theme] .player-status-screen {
+  display: grid;
+  min-height: calc(100dvh - 7rem);
+  place-items: center;
+}
+
+:root[data-visual-theme] .player-status-card {
+  width: 100%;
+  padding: clamp(1.75rem, 6vw, 2.5rem) 1.5rem;
+}
+
+:root[data-visual-theme] .player-status-icon {
+  display: grid;
+  width: 4.5rem;
+  height: 4.5rem;
+  place-items: center;
+  margin: 0 auto 1.5rem;
+  border: 1px solid rgb(var(--c-accent-fg) / 0.3);
+  border-radius: 1.4rem;
+  background: rgb(var(--c-accent-subtle) / 0.75);
+  color: rgb(var(--c-accent-fg));
+}
+
+:root[data-visual-theme] .player-loading-dots {
+  display: flex;
+  justify-content: center;
+  gap: 0.4rem;
+  margin: 1.5rem 0;
+}
+
+:root[data-visual-theme] .player-loading-dots > span {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 999px;
+  background: rgb(var(--c-accent-fg));
+  animation: player-dot 1.2s ease-in-out infinite;
+}
+
+:root[data-visual-theme] .player-loading-dots > span:nth-child(2) { animation-delay: 150ms; }
+:root[data-visual-theme] .player-loading-dots > span:nth-child(3) { animation-delay: 300ms; }
+
+@keyframes player-dot {
+  0%, 70%, 100% { transform: translateY(0); opacity: 0.45; }
+  35% { transform: translateY(-0.35rem); opacity: 1; }
+}
+
+:root[data-visual-theme] .player-question {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  padding-bottom: 1.5rem;
+}
+
+:root[data-visual-theme] .player-question--centered {
+  min-height: calc(100dvh - 7rem);
+  justify-content: center;
+}
+
+:root[data-visual-theme] .player-question__header {
+  padding: 1rem 1.1rem;
+  margin-bottom: 0.3rem;
+}
+
+:root[data-visual-theme] .player-question__answer,
+:root[data-visual-theme] .player-question__image-option {
+  border-radius: 1.25rem;
+  overflow-wrap: anywhere;
+  box-shadow: 0 14px 28px -18px rgb(var(--c-shadow) / 0.45), inset 0 1px 0 rgb(var(--c-surface-raised) / 0.38);
+}
+
+:root[data-visual-theme] .player-question__answer {
+  border: 1px solid rgb(var(--c-line-strong) / 0.45);
+}
+
+:root[data-visual-theme] .player-question__input {
+  border-radius: 1rem;
+  background: rgb(var(--c-surface-sunken) / 0.78);
+  box-shadow: inset 0 1px 0 rgb(var(--c-surface-raised) / 0.45);
+}
+
+:root[data-visual-theme] .player-question__submit,
+:root[data-visual-theme] .player-play-again {
+  border-radius: 1rem;
+  background: linear-gradient(110deg, rgb(var(--c-accent)), rgb(var(--c-accent-hover)));
+  box-shadow: 0 14px 28px -16px rgb(var(--c-accent) / 0.65);
+}
+
+:root[data-visual-theme] .player-question__submit:hover,
+:root[data-visual-theme] .player-play-again:hover {
+  background: rgb(var(--c-accent-hover));
+}
+
+:root[data-visual-theme] .player-question__locked {
+  padding: 1.75rem 1.25rem;
+  text-align: center;
+}
+
+:root[data-visual-theme] .player-question__notice {
+  padding: 0.8rem 1rem;
+  border: 1px solid rgb(var(--c-warning) / 0.4);
+  border-radius: 0.9rem;
+  background: rgb(var(--c-warning-subtle) / 0.7);
+}
+
+:root[data-visual-theme] .player-result-card {
+  width: 100%;
+  padding: 1.75rem 1.25rem;
+}
+
+:root[data-visual-theme] .player-result-stat {
+  padding: 1rem;
+  border: 1px solid rgb(var(--c-line-strong) / 0.35);
+  border-radius: 1rem;
+  background: rgb(var(--c-surface-raised) / 0.52);
+}
+
+/* The optional question poll: a quieter glass well inside the status/result card. */
+:root[data-visual-theme] .player-poll {
+  padding: 1rem;
+  border: 1px solid rgb(var(--c-line-strong) / 0.35);
+  border-radius: 1rem;
+  background: rgb(var(--c-surface-raised) / 0.52);
+}
+
+:root[data-visual-theme] .player-recap-row {
+  padding: 1.25rem;
+  border-radius: 1.25rem;
+  overflow-wrap: anywhere;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root[data-visual-theme] .player-loading-dots > span { animation: none; opacity: 0.75; }
+}
+
+@media (max-width: 360px) {
+  :root[data-visual-theme] .player-game { padding-inline: 0.75rem; }
+  :root[data-visual-theme] .player-game__room-code { padding-inline: 0.5rem; font-size: 0.7rem; }
+  :root[data-visual-theme] .player-game__top { gap: 0.4rem; }
+}

@@ -1,0 +1,177 @@
+{
+  "format": "buzzer/game",
+  "version": 1,
+  "game": {
+    "title": "US Geography & History",
+    "description": "A classroom review of United States geography and history. Locate cities by latitude and longitude (Pin It), estimate key dates and distances (Estimate), and check core facts about states, rivers and founding events.",
+    "max_players": 100
+  },
+  "questions": [
+    {
+      "type": "pin_drop",
+      "grading_type": "ACCURACY",
+      "prompt": "The grid is a map of the continental US: left–right is longitude (°W shown as negative), down–up is latitude (°N). Drop a pin on Chicago, Illinois.",
+      "config": {
+        "grid": { "xMin": -125, "xMax": -65, "yMin": 20, "yMax": 50, "step": 5 },
+        "snap": false
+      },
+      "answer_data": {
+        "target": { "x": -87.6, "y": 41.9 },
+        "fullRadius": 1.5,
+        "zeroRadius": 6
+      },
+      "time_limit_seconds": 30,
+      "points_value": 1.0
+    },
+    {
+      "type": "estimate",
+      "grading_type": "ACCURACY",
+      "prompt": "In what year did the United States buy the Louisiana Territory from France?",
+      "config": { "unit": "year", "integer": true },
+      "answer_data": {
+        "answer": 1803,
+        "tolerance": { "mode": "absolute", "full": 1, "zero": 15 }
+      },
+      "time_limit_seconds": 20,
+      "points_value": 1.0
+    },
+    {
+      "type": "multiple_choice",
+      "grading_type": "ACCURACY",
+      "prompt": "Which river forms much of the border between Texas and Mexico?",
+      "config": {
+        "options": ["Colorado River", "Rio Grande", "Red River", "Pecos River"]
+      },
+      "answer_data": {
+        "answer_points": [0.0, 1.0, 0.0, 0.0]
+      },
+      "time_limit_seconds": 20,
+      "points_value": 1.0
+    },
+    {
+      "type": "true_false",
+      "grading_type": "ACCURACY",
+      "prompt": "The United States purchased Alaska from Russia.",
+      "config": {},
+      "answer_data": {
+        "answer_points": { "true": 1.0, "false": 0.0 }
+      },
+      "time_limit_seconds": 25,
+      "points_value": 1.0
+    },
+    {
+      "type": "fill_in_the_blank",
+      "grading_type": "ACCURACY",
+      "prompt": "What is the capital city of Wisconsin?",
+      "config": { "maxLength": 30 },
+      "answer_data": {
+        "acceptedAnswers": ["Madison"],
+        "answerPoints": [1.0],
+        "editDistance": 2
+      },
+      "time_limit_seconds": 30,
+      "points_value": 1.0
+    },
+    {
+      "type": "estimate",
+      "grading_type": "ACCURACY",
+      "prompt": "In what year did Wisconsin become a state?",
+      "config": { "unit": "year", "integer": true },
+      "answer_data": {
+        "answer": 1848,
+        "tolerance": { "mode": "absolute", "full": 1, "zero": 15 }
+      },
+      "time_limit_seconds": 20,
+      "points_value": 1.0
+    },
+    {
+      "type": "multi_select",
+      "grading_type": "ACCURACY",
+      "prompt": "Which of these states share a land border with Canada? Select all that apply.",
+      "config": {
+        "options": ["Montana", "Iowa", "Maine", "Oregon"]
+      },
+      "answer_data": {
+        "answer_points": [1.0, -1.0, 1.0, -1.0]
+      },
+      "time_limit_seconds": 35,
+      "points_value": 2.0
+    },
+    {
+      "type": "pin_drop",
+      "grading_type": "ACCURACY",
+      "prompt": "Same map: longitude left–right (°W negative), latitude down–up (°N). Drop a pin on Denver, Colorado.",
+      "config": {
+        "grid": { "xMin": -125, "xMax": -65, "yMin": 20, "yMax": 50, "step": 5 },
+        "snap": false
+      },
+      "answer_data": {
+        "target": { "x": -105.0, "y": 39.7 },
+        "fullRadius": 1.5,
+        "zeroRadius": 6
+      },
+      "time_limit_seconds": 40,
+      "points_value": 1.0
+    },
+    {
+      "type": "multiple_choice",
+      "grading_type": "ACCURACY",
+      "prompt": "Which state was the first to ratify the US Constitution?",
+      "config": {
+        "options": ["Virginia", "Pennsylvania", "Delaware", "Massachusetts"]
+      },
+      "answer_data": {
+        "answer_points": [0.0, 0.0, 1.0, 0.0]
+      },
+      "time_limit_seconds": 30,
+      "points_value": 1.0
+    },
+    {
+      "type": "estimate",
+      "grading_type": "ACCURACY",
+      "prompt": "Roughly how long is the Mississippi River, from its source in Minnesota to the Gulf of Mexico?",
+      "config": { "unit": "miles", "integer": true },
+      "answer_data": {
+        "answer": 2340,
+        "tolerance": { "mode": "relative", "full": 5, "zero": 30 }
+      },
+      "time_limit_seconds": 30,
+      "points_value": 2.0
+    },
+    {
+      "type": "estimate",
+      "grading_type": "ACCURACY",
+      "prompt": "How many original British colonies joined together to form the United States?",
+      "config": { "unit": "colonies", "integer": true },
+      "answer_data": {
+        "answer": 13,
+        "tolerance": { "mode": "absolute", "full": 0, "zero": 5 }
+      },
+      "time_limit_seconds": 25,
+      "points_value": 1.0
+    },
+    {
+      "type": "pin_drop",
+      "grading_type": "COMPLETENESS",
+      "prompt": "Class map: drop a pin roughly where you grew up (if it's outside the continental US, pin the nearest edge).",
+      "config": {
+        "grid": { "xMin": -125, "xMax": -65, "yMin": 20, "yMax": 50, "step": 5 },
+        "snap": false
+      },
+      "answer_data": {},
+      "time_limit_seconds": 30,
+      "points_value": 1.0
+    },
+    {
+      "type": "multiple_choice",
+      "grading_type": "COMPLETENESS",
+      "prompt": "Which period of US history would you most like to study next?",
+      "config": {
+        "options": ["Colonial era", "Civil War & Reconstruction", "Westward expansion", "Civil Rights Movement"]
+      },
+      "answer_data": {},
+      "time_limit_seconds": 25,
+      "points_value": 1.0
+    }
+  ]
+}

@@ -1,0 +1,145 @@
+{
+  "format": "buzzer/game",
+  "version": 1,
+  "game": {
+    "title": "Game On! Sports & Games Party",
+    "description": "A party game for sports fans and board-game nerds alike. Find your spot on the court (Pin It), guess the numbers behind the games (Estimate), and settle some very important debates.",
+    "max_players": 150
+  },
+  "questions": [
+    {
+      "type": "pin_drop",
+      "grading_type": "COMPLETENESS",
+      "prompt": "Warm-up! Left–right is how competitive you are (−5 chill … 5 must win); down–up is your trash-talk level (−5 silent … 5 relentless).",
+      "config": {
+        "grid": { "xMin": -5, "xMax": 5, "yMin": -5, "yMax": 5, "step": 1 },
+        "snap": false
+      },
+      "answer_data": {},
+      "time_limit_seconds": 20,
+      "points_value": 1.0
+    },
+    {
+      "type": "estimate",
+      "grading_type": "ACCURACY",
+      "prompt": "How many squares are on a chessboard?",
+      "config": { "unit": "squares", "integer": true },
+      "answer_data": {
+        "answer": 64,
+        "tolerance": { "mode": "absolute", "full": 0, "zero": 20 }
+      },
+      "time_limit_seconds": 15,
+      "points_value": 1.0
+    },
+    {
+      "type": "pin_drop",
+      "grading_type": "ACCURACY",
+      "prompt": "Basketball half-court! Left–right is feet from the middle of the court; down–up is feet from the baseline under the hoop. Drop a pin on the middle of the free-throw line.",
+      "config": {
+        "grid": { "xMin": -25, "xMax": 25, "yMin": 0, "yMax": 50, "step": 5 },
+        "snap": false
+      },
+      "answer_data": {
+        "target": { "x": 0, "y": 19 },
+        "fullRadius": 2,
+        "zeroRadius": 10
+      },
+      "time_limit_seconds": 20,
+      "points_value": 1.0
+    },
+    {
+      "type": "multiple_choice",
+      "grading_type": "ACCURACY",
+      "prompt": "Which sport is played with a shuttlecock?",
+      "config": {
+        "options": ["Squash", "Badminton", "Table tennis", "Pickleball"]
+      },
+      "answer_data": {
+        "answer_points": [0.0, 1.0, 0.0, 0.0]
+      },
+      "time_limit_seconds": 15,
+      "points_value": 1.0
+    },
+    {
+      "type": "true_false",
+      "grading_type": "ACCURACY",
+      "prompt": "In American football, a touchdown is worth 7 points.",
+      "config": {},
+      "answer_data": {
+        "answer_points": { "true": 0.0, "false": 1.0 }
+      },
+      "time_limit_seconds": 15,
+      "points_value": 1.0
+    },
+    {
+      "type": "estimate",
+      "grading_type": "ACCURACY",
+      "prompt": "In what year were the first modern Olympic Games held in Athens?",
+      "config": { "unit": "year", "integer": true },
+      "answer_data": {
+        "answer": 1896,
+        "tolerance": { "mode": "absolute", "full": 0, "zero": 20 }
+      },
+      "time_limit_seconds": 20,
+      "points_value": 1.0
+    },
+    {
+      "type": "fill_in_the_blank",
+      "grading_type": "ACCURACY",
+      "prompt": "Wimbledon is the oldest championship in which sport?",
+      "config": { "maxLength": 20 },
+      "answer_data": {
+        "acceptedAnswers": ["tennis", "lawn tennis"],
+        "answerPoints": [1.0, 1.0],
+        "editDistance": 1
+      },
+      "time_limit_seconds": 15,
+      "points_value": 1.0
+    },
+    {
+      "type": "multi_select",
+      "grading_type": "ACCURACY",
+      "prompt": "Which of these were medal sports at the Paris 2024 Summer Olympics? Pick them all.",
+      "config": {
+        "options": ["Breaking (breakdancing)", "Cricket", "Surfing", "Darts"]
+      },
+      "answer_data": {
+        "answer_points": [1.0, -1.0, 1.0, -1.0]
+      },
+      "time_limit_seconds": 25,
+      "points_value": 2.0
+    },
+    {
+      "type": "estimate",
+      "grading_type": "ACCURACY",
+      "prompt": "Roughly how many dimples are on a typical golf ball?",
+      "config": { "unit": "dimples", "integer": true },
+      "answer_data": {
+        "answer": 336,
+        "tolerance": { "mode": "relative", "full": 15, "zero": 60 }
+      },
+      "time_limit_seconds": 20,
+      "points_value": 1.0
+    },
+    {
+      "type": "estimate",
+      "grading_type": "COMPLETENESS",
+      "prompt": "Be honest: how many hours of sports did you watch last week?",
+      "config": { "unit": "hours", "integer": true },
+      "answer_data": {},
+      "time_limit_seconds": 15,
+      "points_value": 1.0
+    },
+    {
+      "type": "multiple_choice",
+      "grading_type": "COMPLETENESS",
+      "prompt": "Game night is on you. Which board game are you bringing?",
+      "config": {
+        "options": ["Monopoly", "Catan", "Scrabble", "Clue"]
+      },
+      "answer_data": {},
+      "time_limit_seconds": 15,
+      "points_value": 1.0
+    }
+  ]
+}

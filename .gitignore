@@ -1,0 +1,40 @@
+# Environment / secrets (commit only .env.example)
+.env
+.env.*
+!.env.example
+stack.env
+*.pem
+*.pyc
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+build/
+node_modules/
+*.tsbuildinfo
+frontend/*/tailwind.config.js
+frontend/*/tailwind.config.d.ts
+frontend/*/vite.config.js
+frontend/*/vite.config.d.ts
+frontend/host/dist/*
+!frontend/host/dist/.gitkeep
+frontend/player/dist/*
+!frontend/player/dist/.gitkeep
+frontend/admin/dist/*
+!frontend/admin/dist/.gitkeep
+logs/*.log
+logs/*.jsonl
+data/
+.DS_Store
+*.swp
+*.swo
+.venv/
+
+# Editors / OS
+.vscode/
+.idea/
+Thumbs.db
+
+# Coverage
+.coverage
+htmlcov/

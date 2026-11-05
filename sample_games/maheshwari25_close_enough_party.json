@@ -1,0 +1,157 @@
+{
+  "format": "buzzer/game",
+  "version": 1,
+  "game": {
+    "title": "Close Enough! The Guessing Party",
+    "description": "A party game where being close still scores. Guess numbers you half-know (Estimate), find the hidden treasure on the map (Pin It), and settle the big debates. No trivia degree required.",
+    "max_players": 150
+  },
+  "questions": [
+    {
+      "type": "pin_drop",
+      "grading_type": "COMPLETENESS",
+      "prompt": "Vibe check! Left–right is how much fun you're having (−5 bored … 5 amazing); down–up is how hungry you are (−5 stuffed … 5 starving).",
+      "config": {
+        "grid": { "xMin": -5, "xMax": 5, "yMin": -5, "yMax": 5, "step": 1 },
+        "snap": false
+      },
+      "answer_data": {},
+      "time_limit_seconds": 20,
+      "points_value": 1.0
+    },
+    {
+      "type": "estimate",
+      "grading_type": "ACCURACY",
+      "prompt": "How tall is the Eiffel Tower, antennas included?",
+      "config": { "unit": "m", "integer": true },
+      "answer_data": {
+        "answer": 330,
+        "tolerance": { "mode": "relative", "full": 5, "zero": 30 }
+      },
+      "time_limit_seconds": 20,
+      "points_value": 1.0
+    },
+    {
+      "type": "multiple_choice",
+      "grading_type": "ACCURACY",
+      "prompt": "Which planet has the shortest day — the fastest spin?",
+      "config": {
+        "options": ["Earth", "Mars", "Jupiter", "Venus"]
+      },
+      "answer_data": {
+        "answer_points": [0.0, 0.0, 1.0, 0.0]
+      },
+      "time_limit_seconds": 20,
+      "points_value": 1.0
+    },
+    {
+      "type": "estimate",
+      "grading_type": "ACCURACY",
+      "prompt": "In what year did the first iPhone go on sale?",
+      "config": { "unit": "year", "integer": true },
+      "answer_data": {
+        "answer": 2007,
+        "tolerance": { "mode": "absolute", "full": 0, "zero": 5 }
+      },
+      "time_limit_seconds": 15,
+      "points_value": 1.0
+    },
+    {
+      "type": "pin_drop",
+      "grading_type": "ACCURACY",
+      "prompt": "Treasure hunt! The treasure is buried 3 steps right and 2 steps down from the centre of the map. Drop your pin on it — fast!",
+      "config": {
+        "grid": { "xMin": -6, "xMax": 6, "yMin": -4, "yMax": 4, "step": 1 },
+        "snap": true
+      },
+      "answer_data": {
+        "target": { "x": 3, "y": -2 },
+        "fullRadius": 0.5,
+        "zeroRadius": 3
+      },
+      "time_limit_seconds": 15,
+      "points_value": 1.0
+    },
+    {
+      "type": "true_false",
+      "grading_type": "ACCURACY",
+      "prompt": "Honey never spoils: archaeologists have found still-edible honey in ancient Egyptian tombs.",
+      "config": {},
+      "answer_data": {
+        "answer_points": { "true": 1.0, "false": 0.0 }
+      },
+      "time_limit_seconds": 15,
+      "points_value": 1.0
+    },
+    {
+      "type": "multi_select",
+      "grading_type": "ACCURACY",
+      "prompt": "Botanically speaking, which of these are actually berries? Pick them all.",
+      "config": {
+        "options": ["Banana", "Grape", "Strawberry", "Raspberry"]
+      },
+      "answer_data": {
+        "answer_points": [1.0, 1.0, -1.0, -1.0]
+      },
+      "time_limit_seconds": 25,
+      "points_value": 2.0
+    },
+    {
+      "type": "estimate",
+      "grading_type": "ACCURACY",
+      "prompt": "How many keys does a standard piano have?",
+      "config": { "unit": "keys", "integer": true },
+      "answer_data": {
+        "answer": 88,
+        "tolerance": { "mode": "absolute", "full": 0, "zero": 20 }
+      },
+      "time_limit_seconds": 15,
+      "points_value": 1.0
+    },
+    {
+      "type": "fill_in_the_blank",
+      "grading_type": "ACCURACY",
+      "prompt": "What fruit is the main ingredient of guacamole?",
+      "config": { "maxLength": 20 },
+      "answer_data": {
+        "acceptedAnswers": ["avocado", "avocados"],
+        "answerPoints": [1.0, 1.0],
+        "editDistance": 2
+      },
+      "time_limit_seconds": 15,
+      "points_value": 1.0
+    },
+    {
+      "type": "estimate",
+      "grading_type": "ACCURACY",
+      "prompt": "Roughly how many times does a resting adult heart beat in one day?",
+      "config": { "unit": "beats", "integer": true },
+      "answer_data": {
+        "answer": 100000,
+        "tolerance": { "mode": "relative", "full": 10, "zero": 50 }
+      },
+      "time_limit_seconds": 20,
+      "points_value": 2.0
+    },
+    {
+      "type": "estimate",
+      "grading_type": "COMPLETENESS",
+      "prompt": "Confession time: how many cups of coffee or tea have you had today?",
+      "config": { "unit": "cups", "integer": true },
+      "answer_data": {},
+      "time_limit_seconds": 15,
+      "points_value": 1.0
+    },
+    {
+      "type": "multiple_choice",
+      "grading_type": "COMPLETENESS",
+      "prompt": "The great debate: what's the best pizza topping?",
+      "config": {
+        "options": ["Pepperoni", "Mushrooms", "Pineapple", "Extra cheese"]
+      },
+      "answer_data": {},
+      "time_limit_seconds": 15,
+      "points_value": 1.0
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+/*
+ * Base rules shared by the three apps (T9). Imported *after* Tailwind's preflight
+ * (see each app's src/index.css), so these win ties by source order — notably over
+ * preflight's `:-moz-focusring { outline: auto }`.
+ *
+ * The focus outline below is the only focus style: components must not add
+ * focus:ring / outline-none utilities (scripts/check_theme_tokens.py bans them).
+ */
+
+body {
+  background-color: rgb(var(--c-canvas));
+  color: rgb(var(--c-fg));
+}
+
+:focus-visible {
+  outline: 3px solid rgb(var(--c-focus));
+  outline-offset: 2px;
+}
+
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* For focusables inside overflow-hidden/auto containers, where an outside outline
+   would be clipped (sidebars, scroll lists, table cells, the image picker grid). */
+.focus-inset:focus-visible {
+  outline-offset: -3px;
+}
+
+::selection {
+  background-color: rgb(var(--c-accent) / 0.25);
+}

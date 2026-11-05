@@ -1,0 +1,140 @@
+/*
+ * Buzzer theme tokens — the single source of every colour in the three apps (T9).
+ *
+ * Each --c-* variable holds space-separated RGB channels, so Tailwind's opacity
+ * modifiers work (`bg-surface/80`). The preset (tailwind-preset.ts) maps every name
+ * to a Tailwind colour; components use only those token classes, never palette
+ * colours. :root is the light theme; [data-theme="dark"] overrides it. Both blocks
+ * define the same names (tests/unit/test_theme_contrast.py checks that, and every
+ * contrast pair the UI uses). Roles and ratios: docs/plans/t9-theming.md §4.2.
+ *
+ * The --canvas-* values are complete colours, because the 2D canvas can't resolve
+ * var(): GridCanvas/NumberLine read them with getPropertyValue.
+ */
+
+:root {
+  color-scheme: light;
+
+  --c-canvas: 248 250 252; /* #f8fafc  page background */
+  --c-surface: 255 255 255; /* #ffffff  cards, panels, sidebar */
+  --c-surface-raised: 255 255 255; /* #ffffff  dialogs, popovers (with shadow-raised) */
+  --c-surface-sunken: 241 245 249; /* #f1f5f9  inputs, wells, nested panels, tracks */
+  --c-surface-hover: 238 242 247; /* #eef2f7  hover of rows, items, ghost buttons */
+
+  --c-fg: 15 23 42; /* #0f172a  primary text */
+  --c-fg-muted: 71 85 105; /* #475569  secondary text, labels */
+  --c-fg-subtle: 93 107 128; /* #5d6b80  hints, captions, placeholders */
+  --c-on-color: 255 255 255; /* text on filled accent/status/answer colours */
+
+  --c-line: 226 232 240; /* #e2e8f0  dividers, card borders */
+  --c-line-strong: 124 137 158; /* #7c899e  control borders (>= 3:1) */
+
+  --c-accent: 79 70 229; /* #4f46e5 */
+  --c-accent-hover: 67 56 202; /* #4338ca */
+  --c-accent-fg: 67 56 202; /* #4338ca  accent text and icons */
+  --c-accent-subtle: 238 242 255; /* #eef2ff  selection */
+
+  --c-success: 21 128 61; /* #15803d */
+  --c-success-fg: 22 101 52; /* #166534 */
+  --c-success-subtle: 240 253 244; /* #f0fdf4 */
+  --c-danger: 220 38 38; /* #dc2626 */
+  --c-danger-fg: 185 28 28; /* #b91c1c */
+  --c-danger-subtle: 254 242 242; /* #fef2f2 */
+  --c-warning: 180 83 9; /* #b45309 */
+  --c-warning-fg: 146 64 14; /* #92400e */
+  --c-warning-subtle: 255 251 235; /* #fffbeb */
+
+  --c-focus: 79 70 229; /* #4f46e5 */
+
+  /* Player answer colours: red, blue, gold, green, purple, orange, pink, teal.
+     White text is >= 4.5:1 on each; the same in both themes. */
+  --c-answer-1: 220 38 38; /* #dc2626 */
+  --c-answer-2: 37 99 235; /* #2563eb */
+  --c-answer-3: 161 98 7; /* #a16207 */
+  --c-answer-4: 21 128 61; /* #15803d */
+  --c-answer-5: 147 51 234; /* #9333ea */
+  --c-answer-6: 194 65 12; /* #c2410c */
+  --c-answer-7: 190 24 93; /* #be185d */
+  --c-answer-8: 15 118 110; /* #0f766e */
+
+  --c-qr: 255 255 255; /* the tile behind the QR code only */
+  --c-scrim: 15 23 42; /* modal backdrops, used at an alpha */
+  --c-shadow: 15 23 42; /* shadow colour (boxShadow only) */
+
+  /* Decorative scene light: never used behind text without a surface. */
+  --c-scene-rose: 180 58 111;
+  --c-scene-violet: 105 70 170;
+  --c-scene-blue: 54 91 173;
+
+  --canvas-bg: rgb(241 245 249); /* = surface-sunken */
+  --canvas-grid: rgb(203 213 225);
+  --canvas-axis: rgb(71 85 105);
+  --canvas-label: rgb(71 85 105);
+  --canvas-pin: rgb(79 70 229);
+  --canvas-target: rgb(21 128 61);
+  --canvas-ring: rgba(21, 128, 61, 0.18);
+  --canvas-highlight: rgb(180 83 9);
+  --canvas-halo: rgb(255 255 255); /* behind marks drawn on a picture */
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+
+  --c-canvas: 11 17 32; /* #0b1120 */
+  --c-surface: 19 28 46; /* #131c2e */
+  --c-surface-raised: 30 41 59; /* #1e293b */
+  --c-surface-sunken: 7 11 20; /* #070b14 */
+  --c-surface-hover: 36 48 73; /* #243049 */
+
+  --c-fg: 241 245 249; /* #f1f5f9 */
+  --c-fg-muted: 203 213 225; /* #cbd5e1 */
+  --c-fg-subtle: 148 163 184; /* #94a3b8 */
+  --c-on-color: 255 255 255;
+
+  --c-line: 51 65 85; /* #334155 */
+  --c-line-strong: 100 116 139; /* #64748b */
+
+  --c-accent: 79 70 229; /* #4f46e5 */
+  --c-accent-hover: 88 80 236; /* #5850ec */
+  --c-accent-fg: 165 180 252; /* #a5b4fc */
+  --c-accent-subtle: 30 27 75; /* #1e1b4b */
+
+  --c-success: 21 128 61; /* #15803d */
+  --c-success-fg: 74 222 128; /* #4ade80 */
+  --c-success-subtle: 5 46 22; /* #052e16 */
+  --c-danger: 220 38 38; /* #dc2626 */
+  --c-danger-fg: 248 113 113; /* #f87171 */
+  --c-danger-subtle: 59 10 10; /* #3b0a0a */
+  --c-warning: 180 83 9; /* #b45309 */
+  --c-warning-fg: 251 191 36; /* #fbbf24 */
+  --c-warning-subtle: 58 34 5; /* #3a2205 */
+
+  --c-focus: 129 140 248; /* #818cf8 */
+
+  --c-answer-1: 220 38 38;
+  --c-answer-2: 37 99 235;
+  --c-answer-3: 161 98 7;
+  --c-answer-4: 21 128 61;
+  --c-answer-5: 147 51 234;
+  --c-answer-6: 194 65 12;
+  --c-answer-7: 190 24 93;
+  --c-answer-8: 15 118 110;
+
+  --c-qr: 255 255 255;
+  --c-scrim: 0 0 0;
+  --c-shadow: 0 0 0;
+
+  --c-scene-rose: 190 57 106;
+  --c-scene-violet: 116 75 184;
+  --c-scene-blue: 62 99 183;
+
+  --canvas-bg: rgb(7 11 20); /* = surface-sunken */
+  --canvas-grid: rgb(51 65 85);
+  --canvas-axis: rgb(203 213 225);
+  --canvas-label: rgb(148 163 184);
+  --canvas-pin: rgb(129 140 248);
+  --canvas-target: rgb(74 222 128);
+  --canvas-ring: rgba(74, 222, 128, 0.18);
+  --canvas-highlight: rgb(251 191 36);
+  --canvas-halo: rgb(0 0 0); /* behind marks drawn on a picture */
+}
